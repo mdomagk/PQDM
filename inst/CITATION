@@ -1,0 +1,76 @@
+bibentry(
+  bibtype = "Manual",
+  title   = "PQDM: Power Quality Data Mining",
+  author  = person("Max", "Domagk"),
+  year    = "2026",
+  note    = sprintf("R package version %s", meta$Version),
+  header  = "To cite the PQDM package in publications use:"
+)
+
+bibentry(
+  bibtype   = "InProceedings",
+  title     = "Trend analysis for power quality parameters based on long-term measurement campaigns",
+  author    = c(person("Max", "Domagk"), person("Jan", "Meyer"),
+                person("Tongxun", "Wang"), person("Dandan", "Feng"),
+                person("Wei", "Huang"), person("Heiko", "Mayer"),
+                person("Simon", "Wenig"), person("Marco", "Lindner"),
+                person("Jan-Hendrik", "Amrhein")),
+  booktitle = "2022 20th International Conference on Harmonics & Quality of Power (ICHQP)",
+  address   = "Naples, Italy",
+  year      = "2022",
+  pages     = "1--6",
+  doi       = "10.1109/ICHQP53011.2022.9808645",
+  header    = "The methods are described in:"
+)
+
+bibentry(
+  bibtype   = "InProceedings",
+  title     = "Impact of Discontinuous Measurements on the Trend Analysis of Power Quality Parameters",
+  author    = c(person("Max", "Domagk"), person("Jan", "Meyer"),
+                person("Karl", "Scheida"), person("René", "Braunstein"),
+                person("Ewald", "Traxler"), person("Roland", "Zoll")),
+  booktitle = "27th International Conference on Electricity Distribution (CIRED 2023)",
+  address   = "Rome, Italy",
+  year      = "2023",
+  doi       = "10.1049/icp.2023.1082"
+)
+
+bibentry(
+  bibtype   = "InProceedings",
+  title     = "Assessment of Power Quality performance in distribution networks part I -- Measurement campaign and initial analysis",
+  author    = c(person("Etienne", "Gasch"), person("Max", "Domagk"),
+                person("Jan", "Meyer"), person("Sami", "Abdelrahman"),
+                person("Huilian", "Liao"), person("Jovica V.", "Milanovic")),
+  booktitle = "2016 17th International Conference on Harmonics and Quality of Power (ICHQP)",
+  address   = "Belo Horizonte, Brazil",
+  year      = "2016",
+  pages     = "164--169",
+  doi       = "10.1109/ICHQP.2016.7783325"
+)
+
+bibentry(
+  bibtype   = "InProceedings",
+  title     = "Assessment of Power Quality performance in distribution networks part II -- Performance Indices and ranking of network buses",
+  author    = c(person("Sami", "Abdelrahman"), person("Huilian", "Liao"),
+                person("Jovica V.", "Milanovic"), person("Etienne", "Gasch"),
+                person("Max", "Domagk"), person("Jan", "Meyer")),
+  booktitle = "2016 17th International Conference on Harmonics and Quality of Power (ICHQP)",
+  address   = "Belo Horizonte, Brazil",
+  year      = "2016",
+  pages     = "431--436",
+  doi       = "10.1109/ICHQP.2016.7783326"
+)
+
+bibentry(
+  bibtype   = "InProceedings",
+  title     = "Seasonal variations in long-term measurements of power quality parameters",
+  author    = c(person("Max", "Domagk"), person("Jan", "Meyer"),
+                person("Peter", "Schegner")),
+  booktitle = "2015 IEEE Eindhoven PowerTech",
+  address   = "Eindhoven, Netherlands",
+  year      = "2015",
+  pages     = "1--6",
+  doi       = "10.1109/PTC.2015.7232396"
+)
+
+# TODO: add the remaining method papers

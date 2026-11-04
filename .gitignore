@@ -1,0 +1,11 @@
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+*.tar.gz
+*.Rcheck/
+__pycache__/
+/doc/
+/Meta/
+vignettes/*.html
+vignettes/*.R

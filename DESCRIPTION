@@ -1,0 +1,31 @@
+Package: PQDM
+Title: Power Quality Data Mining
+Version: 0.5.1
+Authors@R: c(
+    person("Max", "Domagk", , "mdomagk@posteo.de", role = c("aut", "cre", "cph"))
+  )
+Description: Methods for the analysis of long-term power quality measurements
+    based on weekly 95th percentiles of 10-minute values. Covers the assessment
+    of the quality reserve with respect to user-supplied limits and the
+    detection of seasonal variations and trends. All methods are implemented
+    as published or submitted by the author; references are given in the documentation
+    of each function.
+License: GPL (>= 3)
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+Depends:
+    R (>= 4.1.0)
+Imports:
+    dplyr (>= 1.1.0),
+    Rdpack (>= 2.6),
+    rlang,
+    stats,
+    tidyr,
+    utils
+Suggests:
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
+RdMacros: Rdpack
+LazyData: true
+Config/roxygen2/version: 8.1.0

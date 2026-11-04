@@ -1,0 +1,139 @@
+---
+title: "Get started with PQDM"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started with PQDM}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+PQDM implements published methods for the evaluation of long-term power
+quality measurements. This vignette shows the data format, the preparation of
+the data and how the methods are chained. Each method is described in detail
+on its help page, which also names the publication it is based on.
+
+```{r setup}
+library(PQDM)
+```
+
+## Data format
+
+All methods work on weekly 95th percentiles of 10-minute values in long
+format, one row per site, voltage level, phase, parameter and week:
+
+| Column    | Content                                                  |
+|-----------|----------------------------------------------------------|
+| `site`    | measurement site                                         |
+| `voltage` | voltage level or nominal voltage, e.g. `"MV"` or `"20 kV"` |
+| `week`    | Monday of the ISO calendar week, class `Date`            |
+| `phase`   | phase or line-to-line voltage, e.g. `"L1"`               |
+| `param`   | power quality parameter, e.g. `"H5"` for the 5th harmonic |
+| `value`   | weekly 95th percentile                                   |
+
+Missing weeks are marked by `NA` or simply left out. The package contains the
+synthetic data set `pq_weekly_example` with the 3rd and 5th harmonic and Plt
+of 24 fictitious medium-voltage sites from 2022 to 2025; each measurement
+follows one typical course, e.g. a summer season or a rising trend (see
+`?pq_weekly_example`):
+
+```{r}
+head(pq_weekly_example)
+```
+
+## Workflow
+
+A typical analysis consists of three stages:
+
+1. **Data:** `pq_validate()` checks the data and assesses the data
+   availability, `pq_fill()` fills gaps where a method needs complete time
+   series.
+2. **Methods:** one function per method, e.g. `pq_quality_reserve()`,
+   `pq_season()` or `pq_trend()`.
+3. **Results:** `print()` for an overview and `summary()` for the result
+   table of each method; `summary(x, by = ...)` aggregates the quality
+   reserve into indices.
+
+The stages are chained with the pipe:
+
+```{r}
+tr <- pq_weekly_example |>
+  pq_validate() |>
+  pq_fill() |>
+  pq_trend()
+tr
+```
+
+## Validation
+
+`pq_validate()` checks the format, sets invalid values (`0`, `NaN`, `Inf`) to
+`NA`, completes the weekly grid and determines for each time series the
+measurement duration, the share of missing weeks and the longest gap. Time
+series that do not meet the criteria of a method are marked, not removed.
+
+```{r}
+v <- pq_validate(pq_weekly_example)
+v
+```
+
+The data availability per time series is in `v$series`, together with one
+logical column per method:
+
+```{r}
+head(v$series)
+```
+
+The criteria can be changed; the defaults are:
+
+| Method            | Minimum duration | Longest gap | Share of missing weeks |
+|-------------------|------------------|-------------|------------------------|
+| quality reserve   | 1 week           | –           | –                      |
+| season            | 52 weeks         | 10 weeks    | 20 %                   |
+| trend             | 53 weeks         | 10 weeks    | 20 %                   |
+| forecast          | 157 weeks        | 10 weeks    | 20 %                   |
+
+```{r}
+pq_validate(pq_weekly_example, max_gap = 4, max_missing = 0.1)
+```
+
+## Filling gaps
+
+Seasonal variation, trend and forecast need complete time series.
+`pq_fill()` fills the gaps within each time series by linear interpolation
+and marks the filled weeks in the column `filled`:
+
+```{r}
+v <- pq_fill(v)
+v
+
+s20 <- v$data[v$data$site == "S20" & v$data$param == "H5" &
+                v$data$phase == "L1", ]
+plot(s20$week, s20$value, type = "l", xlab = "Week", ylab = "H5 in %",
+     main = "S20, H5, L1: weekly 95th percentiles")
+points(s20$week[s20$filled], s20$value[s20$filled], col = "red", pch = 19)
+```
+
+The methods that need complete series call `pq_fill()` themselves if the data
+have not been filled yet, so the explicit call is optional. The quality
+reserve ignores filled weeks, because an interpolated week is not a
+measurement.
+
+## Methods
+
+| Function               | Method                                            |
+|------------------------|---------------------------------------------------|
+| `pq_quality_reserve()` | quality reserve with respect to user-supplied limits |
+| `pq_season()`          | identification and quantification of seasonal variations |
+| `pq_trend()`           | trend components and recent trend gains           |
+
+Each method accepts either the result of `pq_validate()` or the raw data in
+long format, in which case the validation is called internally.
+
+## Limits
+
+Limits from standards such as EN 50160 or IEC 61000-2-2 are not included in
+the package. Where a method needs limits, they are supplied by the user, e.g.
+from the applicable standard or from planning levels of the network operator.
